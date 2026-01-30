@@ -123,31 +123,38 @@ The proposed **Auction Management System Studio** provides a centralized platfor
 ### 4.1 Use Case Diagram
 
 ```mermaid
-flowchart LR
-    User((Bidder))
-    Admin((Administrator))
+graph LR
+    %% Actors
+    u1((Bidder))
+    a1((Admin))
 
+    %% System Boundary
     subgraph "Auction Management System"
-        Login[Login / Register]
-        ViewItems[View Items]
-        PlaceBid[Place Bid]
-        ViewDetails[View Item Details]
-        AddItem[Add Item]
-        RemoveItem[Remove Item]
-        CloseAuction[Close Auction]
+        direction TB
+        UC1(Login / Register)
+        UC2(View Items)
+        UC3(Place Bid)
+        UC4(Validate Bid)
+        UC5(Manage Inventory)
+        UC6(Add Item)
+        UC7(Remove Item)
+        UC8(Close Auction)
+
+        %% Relationships inside system
+        UC3 -.->|&lt;&lt;include&gt;&gt;| UC4
+        UC6 -.->|&lt;&lt;extend&gt;&gt;| UC5
+        UC7 -.->|&lt;&lt;extend&gt;&gt;| UC5
     end
 
-    User --> Login
-    User --> ViewItems
-    User --> PlaceBid
-    User --> ViewDetails
+    %% Actor to Use Case Connections
+    u1 --- UC1
+    u1 --- UC2
+    u1 --- UC3
 
-    Admin --> Login
-    Admin --> ViewItems
-    Admin --> ViewDetails
-    Admin --> AddItem
-    Admin --> RemoveItem
-    Admin --> CloseAuction
+    a1 --- UC1
+    a1 --- UC2
+    a1 --- UC5
+    a1 --- UC8
 ```
 
 ### 4.2 Data Flow Diagram (DFD)
