@@ -292,24 +292,30 @@ stateDiagram-v2
     Closed --> [*]
 ```
 
-### 4.5 Activity Diagram (Admin Adding Item)
+### 4.5 Activity Diagram (User Placing a Bid)
 
 ```mermaid
 flowchart TD
     Start((Start)) --> Login
-    Login{Is Admin?}
-    Login -- No --> Error[Access Denied] --> End((End))
-    Login -- Yes --> ShowMenu[Show Admin Menu]
+    Login{Is Registered?}
+    Login -- No --> Register[Register New Account] --> Login
+    Login -- Yes --> ShowMenu[Show Main Menu]
     
-    ShowMenu --> SelectAdd[Select Add Item]
-    SelectAdd --> InputDetails[Input Name, Desc, Price]
-    InputDetails --> SelectType[Select Type: Electronics/Art/Furniture]
+    ShowMenu --> ViewItems[View All Items]
+    ViewItems --> SelectBid[Select 'Place Bid']
+    SelectBid --> EnterID[Enter Item ID]
     
-    SelectType --> CreateObj[Instantiate Specific Item Object]
-    CreateObj --> GenerateID[Generate Unique ID]
-    GenerateID --> StoreArray[Add to Item Array]
-    StoreArray --> Success[Display Success Message]
-    Success --> End
+    EnterID --> CheckItem{Item Exists?}
+    CheckItem -- No --> ErrorItem[Error: Item Not Found] --> ShowMenu
+    CheckItem -- Yes --> EnterAmount[Enter Bid Amount]
+    
+    EnterAmount --> Validate{Bid > Current High?}
+    Validate -- No --> ErrorBid[Error: Bid Too Low] --> EnterAmount
+    Validate -- Yes --> Update[Update Highest Bid]
+    
+    Update --> Success[Display Success Message]
+    Success --> ShowMenu
+    ShowMenu --> Logout[Logout] --> End((End))
 ```
 
 ### 4.6 Data Flow Diagrams (DFD)
