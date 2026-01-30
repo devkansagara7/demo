@@ -301,7 +301,7 @@ flowchart TD
     Login -- No --> Error[Access Denied] --> End((End))
     Login -- Yes --> ShowMenu[Show Admin Menu]
     
-    ShowMenu --> SelectAdd[Select "Add Item"]
+    ShowMenu --> SelectAdd[Select Add Item]
     SelectAdd --> InputDetails[Input Name, Desc, Price]
     InputDetails --> SelectType[Select Type: Electronics/Art/Furniture]
     
