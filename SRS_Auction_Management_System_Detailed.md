@@ -11,91 +11,159 @@
 
 ---
 
+## TABLE OF CONTENTS
+
+1. **[INTRODUCTION](#1-introduction)**  
+   1.1 [Purpose](#11-purpose)  
+   1.2 [Document Conventions](#12-document-conventions)  
+   1.3 [Intended Audience](#13-intended-audience)  
+   1.4 [Scope](#14-scope)  
+   1.5 [Glossary and Acronyms](#15-glossary-and-acronyms)  
+   1.6 [References](#16-references)  
+   1.7 [Overview](#17-overview)  
+
+2. **[OVERALL DESCRIPTION](#2-overall-description)**  
+   2.1 [Product Perspective](#21-product-perspective)  
+   2.2 [Problem Statement](#22-problem-statement)  
+   2.3 [Existing System Analysis](#23-existing-system-analysis)  
+   2.4 [Proposed System Analysis](#24-proposed-system-analysis)  
+   2.5 [Product Functions](#25-product-functions)  
+   2.6 [User Characteristics](#26-user-characteristics)  
+   2.7 [Constraints](#27-constraints)  
+   2.8 [Assumptions and Dependencies](#28-assumptions-and-dependencies)  
+   2.9 [Apportioning of Requirements](#29-apportioning-of-requirements)  
+
+3. **[REQUIREMENT SPECIFICATION](#3-requirement-specification)**  
+   3.1 [Functional Requirements](#31-functional-requirements)  
+       - 3.1.1 [Module: User Authentication](#311-module-user-authentication)  
+       - 3.1.2 [Module: Inventory Management](#312-module-inventory-management)  
+       - 3.1.3 [Module: Bidding Engine](#313-module-bidding-engine)  
+       - 3.1.4 [Module: Auction Control](#314-module-auction-control)  
+   3.2 [Detailed Use Case Specifications](#32-detailed-use-case-specifications)  
+   3.3 [Data Dictionary](#33-data-dictionary)  
+   3.4 [Design Constraints](#34-design-constraints)  
+   3.5 [Software System Attributes](#35-software-system-attributes)  
+
+4. **[SYSTEM DIAGRAMS](#4-system-diagrams)**  
+   4.1 [Use Case Diagram](#41-use-case-diagram)  
+   4.2 [Class Diagram](#42-class-diagram)  
+   4.3 [Sequence Diagrams](#43-sequence-diagrams)  
+   4.4 [State Transition Diagram](#44-state-transition-diagram)  
+   4.5 [Activity Diagram](#45-activity-diagram)  
+   4.6 [Data Flow Diagrams (DFD)](#46-data-flow-diagrams-dfd)  
+
+5. **[SYSTEM TEST PLAN](#5-system-test-plan)**  
+   5.1 [Testing Strategy](#51-testing-strategy)  
+   5.2 [Test Cases: Authentication](#52-test-cases-authentication)  
+   5.3 [Test Cases: Bidding Logic](#53-test-cases-bidding-logic)  
+   5.4 [Test Cases: Admin Functions](#54-test-cases-admin-functions)  
+
+6. **[CONCLUSION](#6-conclusion)**  
+
+7. **[SCOPE OF THE PROJECT](#7-scope-of-the-project)**  
+   7.1 [Current Scope](#71-current-scope)  
+   7.2 [Future Enhancements](#72-future-enhancements)  
+   7.3 [Scalability & Integrations](#73-scalability--integrations)  
+
+8. **[APPENDIX](#8-appendix)**  
+   8.1 [Installation Guide](#81-installation-guide)  
+   8.2 [User Manual](#82-user-manual)  
+
+---
+
 ## 1. INTRODUCTION
 
 ### 1.1 Purpose
-The primary purpose of the **Auction Management System Studio (AMSS)** is to simulate a digital auction environment. The system aims to automate the traditional manual bidding process, ensuring transparency, accuracy, and real-time bid validation. By digitizing the auction workflow, the system eliminates human error associated with manual record-keeping and provides an efficient platform for potential buyers to compete for items such as electronics, art, and furniture.
+The purpose of this Software Requirement Specification (SRS) is to provide a comprehensive, detailed description of the **Auction Management System Studio (AMSS)**. This document specifies the requirements, design constraints, and operational environment for the system. It is intended to serve as a blueprint for development and a validation document for academic evaluation. 
 
-### 1.2 Scope
-The scope of the project encompasses the development of a Java-based application that facilitates the entire lifecycle of an auction item. This includes:
-- **User Authentication Module**: Secure login and registration for administrators and bidders.
-- **Inventory Management Module**: Dynamic addition and removal of auction items by administrators.
-- **Bidding Module**: Real-time bid placement with logic to enforce minimum increments and validate bid superiority.
-- **Auction Control Module**: Administrative capability to close auctions and determine winners based on the highest valid bid.
+The primary goal of AMSS is to digitize and automate the conventional auctioning process. By transitioning from manual calls or paper-based tracking to a computer-aided console application, the system ensures ensuring data integrity, calculation accuracy for bid increments, and secure user management.
 
-Technical scope is limited to a single-terminal simulation using standard Java I/O for interaction. The system utilizes object-oriented principles to manage data structures in memory.
+### 1.2 Document Conventions
+- **Bold text** is used for emphasis and to highlight new terms.
+- `Monospace text` is used for code elements, class names, method names, and system inputs/outputs.
+- **[Requirement ID]** format is used to tag specific functional requirements for traceability.
+- Diagrams follow the UML 2.0 standard notation.
 
-### 1.3 Glossary
-- **Bidder**: A registered user authorized to place monetary bids on open auctions.
-- **Admin**: A superuser with privileges to manage system inventory and finalize auctions.
-- **Item**: An object (e.g., Laptop, Painting) instantiated within the system subject to bidding.
-- **Bid**: A numerical value associated with a user, representing a purchase offer.
-- **Increment**: The minimum amount by which a new bid must exceed the current highest bid.
-- **Console/Terminal**: The text-based interface used for Input/Output operations.
+### 1.3 Intended Audience
+This document is prepared for:
+1.  **Project Supervisors / Faculty**: To evaluate the depth, technical correctness, and scope of the semester project.
+2.  **Developers**: To understand the architectural design and implementation logic required.
+3.  **Testers**: To derive test cases and validate system behavior against requirements.
 
-### 1.4 Overview
-The system is architected as a modular Java application. The `Main` class serves as the entry point, orchestrating user interaction via console menus. The `AuctionManager` acts as the controller, managing arrays of `User` and `Item` objects. The `Item` class and its subclasses (`Electronics`, `Art`, `Furniture`) utilize polymorphism to enforce specific bidding rules.
+### 1.4 Scope
+The **Auction Management System Studio** is a Java-based application designed to run on any standard desktop environment supporting the Java Virtual Machine (JVM).
+- **Core Features**: The system supports User Registration, Secure Login, Product Browsing, Bid Placement, Rule Validation (e.g., bid > current highest), and Auction Finalization.
+- **Modules**: The software is partitioned into Authentication, Inventory, Bidding, and Reporting modules.
+- **Data Scope**: In this version, data is persistent only for the duration of the application runtime (RAM-based storage), utilizing Arrays and Objects to simulate a database.
+
+### 1.5 Glossary and Acronyms
+| Term | Definition |
+| :--- | :--- |
+| **AMSS** | Auction Management System Studio |
+| **Bidder** | A standard user role authorized to participate in auctions. |
+| **Admin** | A privileged user role with control over system inventory. |
+| **JVM** | Java Virtual Machine. |
+| **SRS** | Software Requirement Specification. |
+| **Polymorphism** | OOP concept allowing objects of different classes to be treated as objects of a common superclass. |
+| **Console** | The standard input/output text interface (CLI). |
+
+### 1.6 References
+1.  IEEE Std 830-1998, IEEE Recommended Practice for Software Requirements Specifications.
+2.  "Java: The Complete Reference", Herbert Schildt, for standard Java syntax and library usage.
+3.  UML Distilled, Martin Fowler, for diagrammatic conventions.
+
+### 1.7 Overview
+The remainder of this document describes the system in detail. Section 2 provides a high-level overview of the product and its environment. Section 3 details the functional requirements and use case specifics. Section 4 presents the architectural diagrams. Section 5 outlines the testing strategy, culminating in the Conclusion and Future Scope.
 
 ---
 
 ## 2. OVERALL DESCRIPTION
 
 ### 2.1 Product Perspective
-The **Auction Management System Studio** is a standalone, terminal-based software solution. It is designed to replace manual auction ledgers or spreadsheet-based tracking systems. Unlike networked solutions, this version simulates concurrent user activity through sequential logins on a single machine, focusing on logic validation and object state management.
+**Auction Management System Studio** is a self-contained, console-based software product. It does not require network connectivity or external database servers, making it lightweight and portable. It relies on the host operating system's command-line interface (cmd, PowerShell, bash) for user interaction. The system is designed using a **Modular Monolithic Architecture**, where the User Interface, Business Logic, and Data structures reside within a single application process but are logically separated into classes.
 
 ### 2.2 Problem Statement
-Traditional auction processes suffer from several inefficiencies:
-- **Lack of Transparency**: Participants may not have real-time visibility of the current highest bid.
-- **Human Error**: Manual calculation of minimum bid increments often leads to invalid bids being accepted.
-- **Speed**: Physical or paper-based auctions are slow and require significant administrative overhead to determine winners.
-- **Record Keeping**: Storing bid history on paper makes it difficult to audit or review past transactions.
+In traditional manual auction environments, several critical issues arise:
+1.  **Bid Ambiguity**: In fast-paced auctions, it is often unclear who holds the current highest bid.
+2.  **Calculation Errors**: Manually calculating minimum bid increments (e.g., "5% above previous bid") is prone to human arithmetic error.
+3.  **Record Loss**: Paper trails are easily lost or damaged, leading to disputes over ownership or payment.
+4.  **Accessibility**: Physical auctions require presence; a digital system (even simulated) lays the groundwork for remote participation.
 
-### 2.3 Existing System
-Current low-tech solutions typically involve manual bookkeeping or basic Excel spreadsheets.
-- **Drawbacks**:
-    - No automatic validation of rules (e.g., accepting a bid lower than the current price).
-    - Hard to scale beyond a few items.
-    - No security or separation of roles between bidders and auctioneers.
-    - Vulnerable to data loss or tampering.
+### 2.3 Existing System Analysis
+Current solutions for small-scale auctions often involve:
+- **Manual Logbooks**: Recording bids in a physical notebook. *Defect: No searchability, physical degradation.*
+- **Excel Spreadsheets**: Using shared sheets. *Defect: No logic enforcement (users can overwrite cells), no security roles.*
 
-### 2.4 Proposed System
-The proposed automation provides a structured digital environment.
-- **Logic Implementation**: Uses `if-else` conditions to strictly validate that `newBid > currentBid`.
-- **Data Structures**: Utilizes arrays to manage item catalogs and user registries.
-- **Polymorphism**: Differentiates items (e.g., Art may require higher bid increments than Furniture).
-- **Benefits**:
-    - **Accuracy**: Eliminates calculation errors.
-    - **Speed**: Instant updates of item status.
-    - **Security**: Basic authentication protects administrative functions.
+### 2.4 Proposed System Analysis
+The AMSS addresses these issues through automation logic:
+- **Automated Validation**: The `placeBid()` method automatically rejects any input that is numerically lower than the current `highestBid`.
+- **Role-Based Access Control (RBAC)**: Only users with `isAdmin=true` can invoke `addItem()` or `closeAuction()`, preventing unauthorized tampering.
+- **Instant Feedback**: The system provides immediate "SUCCESS" or "ERROR" feedback loops to the user.
+- **Structured Data**: Utilization of `Item` objects ensures every product has a strict ID, Name, Description, and Price structure.
 
 ### 2.5 Product Functions
-The system is divided into functional modules:
-1.  **Authentication**: Verifies credentials against stored user objects.
-2.  **Item Catalog**: Displays all items with their descriptions, prices, and status.
-3.  **Bidding Engine**: Accepts input, validates magnitude against current high bid, and updates state.
-4.  **Admin Console**: Allows creation (factory pattern logic) and deletion of items.
+The system provides the following major functions:
+1.  **Session Management**: Login loop that keeps the application running until "Logout" is selected.
+2.  **Item Visualization**: ASCII-formatted tables or "cards" to display varied inventory items (Electronics, Art, Furniture).
+3.  **Real-time Bidding**: Acceptance of numeric input to update the state of an `Item` object.
+4.  **Inventory Control**: Factory methods to instantiate new `Item` objects and append them to the storage array.
 
 ### 2.6 User Characteristics
-#### 2.6.1 User Requirements
-- Access to a standard PC keyboard and monitor.
-- Ability to read English text prompts.
-
-#### 2.6.2 User Education Level
-- **Bidder**: No specific requirement; general literacy.
-- **Admin**: High school diploma or equivalent; basic organizational skills.
-
-#### 2.6.3 User’s Technical Expertise
-- **Bidder/Admin**: Basic computer literacy (typing, navigating menus). No programming knowledge required.
+- **Bidders**: Undergraduate students or general faculty members. Expected to have basic English literacy and keyboard skills.
+- **Administrators**: Lab assistants or faculty. Expected to understand the auction rules and inventory management concepts.
 
 ### 2.7 Constraints
-- **Technical**: Must run within the JVM (Java Virtual Machine).
-- **Logical**: Data is non-persistent; restarting the application resets the state.
-- **Institutional**: Designed for educational demonstration, not commercial transaction processing.
-- **Security**: Passwords are stored in cleartext in memory (acceptable for this academic level).
+1.  **Memory Limit**: Since data is stored in arrays, there is a hard limit (e.g., 100 items) defined by `MAX_ITEMS` constant.
+2.  **Persistence**: Closing the terminal window results in total data loss (volatile memory).
+3.  **Concurrency**: Only one user can interact with the console at a time (sequential interaction model).
+4.  **Platform**: Must be run on a system capable of executing `.class` files.
 
 ### 2.8 Assumptions and Dependencies
-- The executing machine has JDK 8 or higher installed.
-- The user handles the console window appropriately (no resizing to extremes that break text formatting).
+- The user will not input alphabetic characters when numeric IDs or Prices are requested (though exception handling is implemented).
+- The screen size of the terminal is sufficient to display the ASCII banners and tables without aggressive wrapping.
+
+### 2.9 Apportioning of Requirements
+This SRS covers the initial "Alpha" release of the software. Advanced features like credit card integration, shipping logistics, and persistent SQL database storage are deferred to version 2.0.
 
 ---
 
@@ -103,46 +171,120 @@ The system is divided into functional modules:
 
 ### 3.1 Functional Requirements
 
-#### 3.1.1 Performance Requirements
-- **Response Time**: Menu transitions must occur in less than 0.5 seconds.
-- **Accuracy**: Financial calculations must maintain precision to two decimal places.
-- **Capacity**: The system is configured to handle up to 100 items and 50 users in memory using static array limits.
-- **Error Handling**: Invalid inputs (e.g., strings for price) must be caught without crashing the JVM.
+#### 3.1.1 Module: User Authentication
+- **REQ-AUTH-01**: The system shall allow users to register by providing a username, password, and role selection.
+- **REQ-AUTH-02**: The system shall validate login credentials against the registered user array.
+- **REQ-AUTH-03**: The system shall deny access if the password does not match the stored hash (or string).
+- **REQ-AUTH-04**: The system shall provide a "Logout" mechanism to return to the initial login screen.
 
-#### 3.1.2 Design Constraints
-- **Language**: Strict usage of Java.
-- **UI**: Text-based interface using ASCII formatting for "windows" and "cards".
-- **Storage**: No external database; all data resides in runtime heap memory.
+#### 3.1.2 Module: Inventory Management
+- **REQ-INV-01**: The system shall allow Admins to add new items specifying Name, Description, Type, and Starting Price.
+- **REQ-INV-02**: The system shall automatically generate a unique, sequential Integer ID for every new item.
+- **REQ-INV-03**: The system shall allow Admins to remove an item using its ID.
+- **REQ-INV-04**: The system shall prevent removing an item that does not exist.
 
-#### 3.1.3 Hardware Requirements
-- **Processor**: Intel Core i3 or equivalent (context switching efficiency).
-- **RAM**: 4GB distinct RAM (to support JVM overhead).
-- **Input**: Standard QWERTY keyboard.
+#### 3.1.3 Module: Bidding Engine
+- **REQ-BID-01**: The system shall display the current highest bid for all items.
+- **REQ-BID-02**: The system shall accept a numeric bid amount from a logged-in Bidder.
+- **REQ-BID-03**: The system shall validate that `ProposedBid > CurrentHighestBid` (and `> StartingPrice`).
+- **REQ-BID-04**: The system shall reject bids on items that have a status of "CLOSED".
+- **REQ-BID-05**: For `Art` items, the system shall enforce a minimum 5% increment rule.
 
-#### 3.1.4 Software Requirements
-- **Operating System**: Platform independent (Windows 10+, Ubuntu 20.04+, macOS 12+).
-- **Runtime**: JRE (Java Runtime Environment) 1.8+.
-- **IDE**: VS Code (recommended) or Eclipse for development.
+#### 3.1.4 Module: Auction Control
+- **REQ-CTRL-01**: The system shall allow Admins to close an auction for a specific item.
+- **REQ-CTRL-02**: Upon closure, the system shall announce the Winner (User with highest bid) and the Final Price.
+- **REQ-CTRL-03**: The system shall change the item's status to "CLOSED" to prevent further bids.
 
-#### 3.1.5 Other Requirements
-- **Documentation**: Source code must be commented for academic review.
+### 3.2 Detailed Use Case Specifications
 
-### 3.2 Non-Functional Requirements
+This section provides a detailed text-based breakdown of the primary use cases identified in the diagrams.
 
-#### 3.2.1 Security
-- Access to "Close Auction" and "Add Item" functions is strictly logically gated by the `isAdmin` boolean flag.
+#### Use Case 1: Register User
+- **Actors**: New User
+- **Pre-conditions**: Application is running; User is at Login Menu.
+- **Flow of Events**:
+    1. System displays Login Menu options.
+    2. User selects "Register".
+    3. System prompts for `Username`.
+    4. User enters username.
+    5. System prompts for `Password`.
+    6. User enters password.
+    7. System stores credentials in `User[]` array.
+    8. System displays "Registration Successful".
+- **Post-conditions**: User is added to the system directory.
 
-#### 3.2.2 Reliability
-- The main event loop (`while(true)`) ensures the application remains active until explicitly exited.
+#### Use Case 2: Login
+- **Actors**: Registered User, Administrator
+- **Pre-conditions**: User is registered.
+- **Flow of Events**:
+    1. User selects "Login".
+    2. System requests Credentials.
+    3. User provides inputs.
+    4. System iterates through `User[]` array to find match.
+    5. **If match found**: System checks `isAdmin` flag.
+        - If Admin: Show Admin Menu.
+        - If User: Show User Menu.
+    6. **If no match**: System displays "Invalid Credentials" and returns to menu.
+- **Post-conditions**: User session is active.
 
-#### 3.2.3 Availability
-- The system is available immediately upon execution of the `.class` or `.jar` file.
+#### Use Case 3: Place Bid
+- **Actors**: Authenticated Bidder
+- **Pre-conditions**: User is logged in; Items exist in inventory.
+- **Flow of Events**:
+    1. User selects "Place Bid".
+    2. System requests `Item ID`.
+    3. User enters ID.
+    4. System validates ID existence.
+    5. System shows Item Details (Name, Current Bid).
+    6. System prompts for `Bid Amount`.
+    7. User enters Amount.
+    8. **System validates Amount**:
+        - Checks if Amount > Current Highest.
+        - Checks specific item rules (e.g., Electronics, Art).
+    9. System updates `highestBid` field of the Item.
+    10. System displays "Bid Placed Successfully".
+- **Exceptions**:
+    - *Item Not Found*: Display error.
+    - *Bid Too Low*: Display error and minimum required bid.
+    - *Auction Closed*: Inform user bidding is disabled.
+- **Post-conditions**: The Item's current price is updated.
 
-#### 3.2.4 Maintainability
-- Code is structured into separate files (`Main.java`, `Item.java`, `User.java`) facilitating isolated updates.
+#### Use Case 4: Add Item (Admin)
+- **Actors**: Administrator
+- **Pre-conditions**: Logged in as Admin.
+- **Flow of Events**:
+    1. Admin selects "Add Item".
+    2. System prompts for `Name`, `Description`, `Price`.
+    3. System prompts for `Type` (1. Electronics, 2. Art, 3. Furniture).
+    4. Admin makes selection.
+    5. System calls `generateUniqueId()`.
+    6. System instantiates appropriate subclass (e.g., `new Art(...)`).
+    7. System adds object to `Item[]` array.
+    8. System confirms "Item Added with ID: [X]".
+- **Post-conditions**: New item appears in "View All Items" list.
 
-#### 3.2.5 Supportability
-- The system outputs descriptive error codes and messages to standard output to aid in troubleshooting.
+### 3.3 Data Dictionary
+
+| Name | Type | Description | Constraints |
+| :--- | :--- | :--- | :--- |
+| **USER_DATA** | Array | Stores all User objects. | Max 50 users. |
+| **ITEM_DATA** | Array | Stores all Item objects. | Max 100 items. |
+| `username` | String | Unique identifier for a user. | Non-empty. |
+| `password` | String | Authentication secret. | No specific complexity rules for this version. |
+| `itemId` | Integer | Unique key for items. | Generated sequentially, cannot be duplicate. |
+| `highestBid` | Object | Reference to a `Bid` object. | Contains `amount` and `bidder`. |
+| `isOpen` | Boolean | Status of the auction. | True = Open, False = Closed. |
+| `startingPrice` | Double | Base price of item. | Must be >= 0. |
+
+### 3.4 Design Constraints
+- **Object-Oriented Design**: The system must utilize **Inheritance** (Item -> Art/Electronics) to demonstrate academic understanding of OOP.
+- **Encapsulation**: All class attributes must be `private` and accessed via `public` getters/setters.
+- **Input Sanitization**: The system must handle `InputMismatchException` to prevent crashing on invalid key presses.
+
+### 3.5 Software System Attributes
+- **Reliability**: The system loop allows for continuous operation without memory leaks during a session.
+- **Usability**: Menus are designated with integers (1, 2, 3...) for easy navigation.
+- **Maintainability**: New Item types can be added by simply extending the `Item` class.
 
 ---
 
@@ -196,6 +338,7 @@ classDiagram
         -User currentUser
         +main(args)
         +showMainMenu()
+        +printHeader()
     }
 
     class AuctionManager {
@@ -205,6 +348,7 @@ classDiagram
         +removeItem(int)
         +registerUser(String, String, boolean)
         +login(String, String) : User
+        +generateUniqueId() : int
     }
 
     class User {
@@ -213,6 +357,7 @@ classDiagram
         -boolean isAdmin
         +getUsername()
         +validatePassword(String)
+        +isAdmin()
     }
 
     class Item {
@@ -220,8 +365,10 @@ classDiagram
         -String name
         -double startingPrice
         -Bid highestBid
+        -boolean isOpen
         +placeBid(User, double) : boolean
         +closeAuction()
+        +toString()
     }
 
     class Electronics {
@@ -249,7 +396,8 @@ classDiagram
     Bid --> User
 ```
 
-### 4.3 Sequence Diagram (Placing a Bid)
+### 4.3 Sequence Diagrams
+#### 4.3.1 Placing a Bid
 
 ```mermaid
 sequenceDiagram
@@ -279,20 +427,26 @@ sequenceDiagram
     end
 ```
 
-### 4.4 State Diagram (Lifecycle of an Item)
+### 4.4 State Transition Diagram
+#### 4.4.1 Lifecycle of an Item
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Created
-    Created --> Open : Admin adds to Inventory
-    Open --> Bidded : First valid bid placed
-    Bidded --> Bidded : Higher bid placed
-    Bidded --> Closed : Admin closes auction
-    Open --> Closed : Admin closes (No bids)
-    Closed --> [*]
+    [*] --> Created : Constructor Called
+    Created --> Open : Added to Manager Array
+    
+    state Open {
+        [*] --> NoBids
+        NoBids --> HasBids : Valid Bid Placed
+        HasBids --> HasBids : Higher Bid Placed
+    }
+    
+    Open --> Closed : Admin Closes Auction
+    Closed --> [*] : Removed from Array (Optional)
 ```
 
-### 4.5 Activity Diagram (User Placing a Bid)
+### 4.5 Activity Diagram
+#### 4.5.1 User Placing a Bid
 
 ```mermaid
 flowchart TD
@@ -377,28 +531,80 @@ flowchart TD
 
 ---
 
-## 5. CONCLUSION
-The **Auction Management System Studio** represents a significant step towards modernizing local auction processes. By implementing this system, the inefficiencies of manual bidding are effectively addressed through algorithmic validation and digital record-keeping. The system demonstrates the practical application of core Computer Science concepts, including Object-Oriented Design and Data Structures, fulfilling the academic requirements of the Software Engineering curriculum while providing a scalable foundation for future web-based iterations.
+## 5. SYSTEM TEST PLAN
+
+### 5.1 Testing Strategy
+The testing strategy for AMSS involves **Black Box Testing** where the internal structure is ignored, and functionality is verified against the requirements. Testing is performed manually by executing the system and running through defined scenarios.
+
+### 5.2 Test Cases: Authentication
+
+| Test ID | Description | Input Data | Expected Output | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **TC-01** | Verify Registration | User: `demo`, Pass: `123`, Access: `No` | "User registered successfully" | Pass |
+| **TC-02** | Verify Login (Success) | User: `demo`, Pass: `123` | Login Successful, Main Menu appears | Pass |
+| **TC-03** | Verify Login (Fail) | User: `demo`, Pass: `wrong` | "Invalid credentials" error | Pass |
+| **TC-04** | Verify Admin Access | User: `admin`, Pass: `admin` | Admin options (Add/Remove Item) visible | Pass |
+
+### 5.3 Test Cases: Bidding Logic
+
+| Test ID | Description | Input Data | Expected Output | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **TC-05** | View Items | Select Option 1 | Table of items displayed | Pass |
+| **TC-06** | Place Valid Bid | Item: `1`, Bid: `1300` (Start: 1200) | "Bid placed successfully" | Pass |
+| **TC-07** | Place Low Bid | Item: `1`, Bid: `1250` (High: 1300) | Error: "Bid must be higher than 1300" | Pass |
+| **TC-08** | Bid on Invalid ID | Item: `999` | Error: "Item not found" | Pass |
+| **TC-09** | Bid on Art (Increment) | Item: `Art`, Bid: small incr | Error: "Must be 5% higher" | Pass |
+
+### 5.4 Test Cases: Admin Functions
+
+| Test ID | Description | Input Data | Expected Output | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **TC-10** | Add New Item | Name: `Table`, Price: `50`, Type: `Furniture` | "Item added successfully! ID: [N]" | Pass |
+| **TC-11** | Remove Item | ID: `[N]` | "Item removed successfully" | Pass |
+| **TC-12** | Close Auction | ID: `1` | "Auction Closed. Winner: [User]" | Pass |
+| **TC-13** | Bid on Closed Item | Item: `1` (Closed) | Error: "Auction is closed" | Pass |
 
 ---
 
-## 6. SCOPE OF THE PROJECT
+## 6. CONCLUSION
+The **Auction Management System Studio** has been successfully designed and documented. The system addresses the core problems of manual auctions by providing a digitized, automated, and secure alternative. Through the application of **Object-Oriented Programming (Java)**, **Data Structures (Arrays)**, and **Software Engineering Principles**, the project deliverables meet all functional and non-functional requirements. The system is scalable, maintainable, and serves as a solid foundation for future enterprise-level enhancements.
 
-### 6.1 Current Scope
-The current iteration delivers a fully functional console application capable of handling multiple item types, user roles, and the complete bidding lifecycle within a single session.
+---
 
-### 6.2 Future Enhancements
-- **Persistence**: Integration with a MySQL or SQLite database to retain data between sessions.
-- **Graphical User Interface (GUI)**: Transitioning from console to JavaFX or Swing for a more user-friendly experience.
-- **Reporting**: Advanced analytics for admins to view total revenue and popular items.
-- **Networking**: Implementing Sockets to allow multiple users to bid simultaneously from different machines.
+## 7. SCOPE OF THE PROJECT
 
-### 6.3 Scalability Considerations
-While the current array-based implementation has fixed limits, the modular design allows for easy replacement of arrays with `ArrayLists` or Database connections to support thousands of items.
+### 7.1 Current Scope
+- Single-user console simulation.
+- Support for 3 distinct item categories.
+- Admin-controlled inventory.
+- Basic security via Role-Based Access Control.
 
-### 6.4 Integration Possibilities
-The system's modular architecture (Item/User separation) makes it suitable for integration into larger e-commerce platforms or university inventory management systems.
+### 7.2 Future Enhancements
+- **Web Interface**: Migrating the backend to Spring Boot and the frontend to React.
+- **Database**: Implementing MySQL for permanent data storage.
+- **Payment Gateway**: Integrating Stripe/PayPal APIs for real-money transactions.
+- **AI Analytics**: Predicting final bid prices based on historical trends.
 
-### 6.5 Benefits and Impact
-- **Educational**: Serves as a comprehensive case study for Object-Oriented Programming properties.
-- **Operational**: Demonstrates how digital transformation reduces operational costs and time in auction scenarios.
+### 7.3 Scalability & Integrations
+The modular design allows integration with external Inventory Management Systems (IMS) or University ERP software. The use of Interface-based design allows swapping the current InMemory data store with a DatabaseService without rewriting the business logic.
+
+---
+
+## 8. APPENDIX
+
+### 8.1 Installation Guide
+1.  **Prerequisites**: Ensure Java Development Kit (JDK) 8 or higher is installed.
+    - Verify with `java -version`.
+2.  **Compilation**:
+    ```bash
+    javac Main.java Item.java User.java AuctionManager.java
+    ```
+3.  **Execution**:
+    ```bash
+    java Main
+    ```
+
+### 8.2 User Manual
+- **To Login**: Choose Option 1. Default Admin credentials are `admin` / `admin`.
+- **To Bid**: You must be logged in. Note the Item ID from the "View Items" screen before selecting "Place Bid".
+- **To Exit**: Always use the "Logout" or "Exit" option to ensure the program terminates gracefully.
